@@ -38,11 +38,13 @@ plugins:
 
 functions:
   api:
-    handler: handler.handler
+    handler: server.handler
     events:
       - httpApi:
           path: /
           method: ANY
-      - httpApi:
-          path: /{proxy+}
-          method: ANY
+
+  health-check:
+    handler: server.handler
+    events:
+      - httpApi: 'GET /healthcheck'

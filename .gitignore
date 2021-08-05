@@ -1,3 +1,5 @@
+.serverless/
 node_modules
-.serverless
+.nvmrc
+.DS_Store
 .env
