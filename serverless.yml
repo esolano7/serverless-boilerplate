@@ -1,0 +1,48 @@
+org: wootit
+app: wootitapi
+service: loginApi
+useDotenv: true
+
+frameworkVersion: '2'
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  serverless-offline:
+    noPrependStageInUrl: true
+  prune:
+    automatic: true
+    number: 2
+  cors: 
+    origin: '*'
+    headers:
+      - Content-Type
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: '20201221'
+  stage: dev
+  region: us-east-1
+  timeout: 30
+  environment:
+    DB_HOST: ${params:DB_HOST, env:DB_HOST}
+    DB_USER: ${params:DB_USER, env:DB_USER}
+    DB_PASSWORD: ${params:DB_PASSWORD, env:DB_PASSWORD}
+    DB_PORT: ${params:DB_PORT, env:DB_PORT}
+    JAAS_KID: ${params:JAAS_KID, env:JAAS_KID}
+    JAAS_APID: ${params:JAAS_APID, env:JAAS_APID}
+
+plugins:
+  - serverless-offline
+  - serverless-prune-plugin
+
+functions:
+  api:
+    handler: handler.handler
+    events:
+      - httpApi:
+          path: /
+          method: ANY
+      - httpApi:
+          path: /{proxy+}
+          method: ANY
