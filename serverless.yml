@@ -3,8 +3,6 @@ app: wootitapi
 service: loginApi
 useDotenv: true
 
-frameworkVersion: '2'
-
 custom:
   stage: ${opt:stage, self:provider.stage}
   serverless-offline:
@@ -23,7 +21,6 @@ provider:
   lambdaHashingVersion: '20201221'
   stage: dev
   region: us-east-1
-  timeout: 30
   environment:
     DB_HOST: ${params:DB_HOST, env:DB_HOST}
     DB_USER: ${params:DB_USER, env:DB_USER}
@@ -42,9 +39,11 @@ functions:
     events:
       - httpApi:
           path: /
-          method: ANY
+          method: GET
 
   health-check:
     handler: server.handler
     events:
-      - httpApi: 'GET /healthcheck'
+      - httpApi: 
+          path: /healthcheck
+          method: GET
